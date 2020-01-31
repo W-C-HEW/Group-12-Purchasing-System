@@ -25,9 +25,14 @@ from PurchaseOrder.models import PurchaseOrder,PurchaseOrderItem
 
 @login_required
 def quotationform(request):
+    quotationRequests = RequestForQuotation.objects.all()
+    for r in quotationRequests:
+        if Quotation.objects.filter(request_for_quotation_id_id = r.request_for_quotation_id).count() != 0:
+            quotationRequests = quotationRequests.exclude(request_for_quotation_id=r.request_for_quotation_id)
     context = {
             'title':'Quotation Form',
-            'year':'2019/2020'
+            'year':'2019/2020',
+            'qrows': quotationRequests
         }
     context['user'] = request.user
 
