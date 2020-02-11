@@ -16,6 +16,25 @@
     </form>
     <p>{{error}}</p>
 
+    {% if qrows.count > 0%}
+    <div class="table-wrapper-scroll-y">
+        <table class="table table-bordered table-striped mb-0">
+            <thead>
+                 <tr>
+                    <th scope="col">Available Request For Quotation ID(s)</th>
+                 </tr>
+            </thead>
+            <tbody>
+            {% for r in qrows %}
+                <tr>
+                    <td>{{r.request_for_quotation_id}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
     <form class="purchaseordersubmission" action="quotationconfirmation" method="POST">
         {% csrf_token %}
         <div class="row margintop">
