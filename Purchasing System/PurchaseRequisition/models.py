@@ -25,7 +25,6 @@ class PurchaseRequisitionItem(models.Model):
     quantity= models.IntegerField()
     ref_id = models.CharField(max_length=20,null=True,default=None, blank=True )
 
-
     class Meta:
         unique_together = (("pr_id", "item_id"))
 
