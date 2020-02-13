@@ -50,15 +50,13 @@ def fillingrequestforquotation(request):
     try: 
        
         purchase_requisition = PurchaseRequisition.objects.get(pr_id = pr_id)
-        total = purchase_requisition.total_price
         item_list = PurchaseRequisitionItem.objects.filter(pr_id = pr_id)
         context = {
                 'title': 'Request For Quotation Form',
                 'request_for_quotation_id': 'RFQ' + str(rfq_id),
                 'purchase_requisition_id': pr_id, 
                 'staff_id' : staff_info.person_id,
-                'rows':item_list,
-                'total':total
+                'rows':item_list 
             }
 
         return render(request,'RequestForQuotation/requestforquotationform.html',context)
