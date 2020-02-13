@@ -44,28 +44,43 @@ def fillingquotation(request):
 
     context = {}
     re_of_quo_id = request.GET['re_of_quo_id']
-    quo_id = random.randint(1000000,9999999)
-    user_id  = request.user.id
-    staff = Person.objects.get(user_id = user_id)
-    try: 
-        request_for_quotations = RequestForQuotation.objects.get(request_for_quotation_id = re_of_quo_id)
-        item_list = RequestForQuotationItem.objects.filter(request_for_quotation_id = re_of_quo_id)
-        context = {
-                'title': 'Quotation Form',
-                'quotation_id': 'QUO' + str(quo_id),
-                'request_for_quotation_id': re_of_quo_id, 
-                'staff_id' : staff.person_id,
-                'vendor_id': request_for_quotations.vendor_id.vendor_id,
-                'rows':item_list
+    quotationRequests = RequestForQuotation.objects.all()
+    for r in quotationRequests:
+        if Quotation.objects.filter(request_for_quotation_id_id = r.request_for_quotation_id).count() != 0:
+            quotationRequests = quotationRequests.exclude(request_for_quotation_id=r.request_for_quotation_id)
+
+    try:
+        quotation = Quotation.objects.get(request_for_quotation_id_id = re_of_quo_id); #check if quotation is already created
+        context = { 'error': 'The Quotation is already created! Quotation ID: ' + quotation.quotation_id,
+                    'title': 'Purchase Order Form',
+                    'qrows': quotationRequests
             }
         return render(request,'Quotation/quotationform.html',context)
-
-    except RequestForQuotation.DoesNotExist:
-
-        context = { 'error': 'The request for quotation id is invalid !',
-                    'title': 'Quotation Form'
+    except Quotation.DoesNotExist:
+        quo_id = random.randint(1000000,9999999)
+        user_id  = request.user.id
+        staff = Person.objects.get(user_id = user_id)
+        try: 
+            request_for_quotations = RequestForQuotation.objects.get(request_for_quotation_id = re_of_quo_id)
+            item_list = RequestForQuotationItem.objects.filter(request_for_quotation_id = re_of_quo_id)
+            context = {
+                    'title': 'Quotation Form',
+                    'quotation_id': 'QUO' + str(quo_id),
+                    'request_for_quotation_id': re_of_quo_id, 
+                    'staff_id' : staff.person_id,
+                    'vendor_id': request_for_quotations.vendor_id.vendor_id,
+                    'rows':item_list,
+                    'qrows': quotationRequests
             }
-        return render(request,'Quotation/quotationform.html',context)
+            return render(request,'Quotation/quotationform.html',context)
+
+        except RequestForQuotation.DoesNotExist:
+
+            context = { 'error': 'The request for quotation id is invalid !',
+                        'title': 'Quotation Form',
+                        'qrows': quotationRequests
+                }
+            return render(request,'Quotation/quotationform.html',context)
 
 def quotationconfirmation(request):
 
