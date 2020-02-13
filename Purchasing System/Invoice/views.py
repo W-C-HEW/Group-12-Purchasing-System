@@ -46,7 +46,7 @@ def fillinginvoice(request):
         context = {
                 'title': 'Invoice Form',
                 'invoice_id': 'INV' + str(inv_id),
-                'purchase_order_id': pur_id, #changed from inv_id to pur_id 
+                'purchase_order_id': pur_id, #changed from inv_id to pur_id //changes implemented in part 1, commit done to show which part of the code changed.
                 'staff_id' : purchase_orders.person_id.person_id,
                 'vendor_id': purchase_orders.vendor_id.vendor_id,
                 'rows':item_list
@@ -134,7 +134,7 @@ def invoicedetails(request):
     staff_id = request.POST['staff_id']
     vendor_id = request.POST['vendor_id']
     description = request.POST['description']
-    purchaseorder = get_object_or_404(PurchaseOrder,pk=purchase_order_id) #added Pk=purchase_order_id
+    purchaseorder = get_object_or_404(PurchaseOrder,pk=purchase_order_id) #added Pk=purchase_order_id //changes implemented in part 1, commit done to show which part of the code changed.
     staff_info = Person.objects.get(person_id = staff_id)
     vendor_info = Vendor.objects.get(vendor_id = vendor_id)
 
