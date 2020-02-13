@@ -167,7 +167,7 @@ def purchaserequisitiondetails(request):
     purchase_requisition = PurchaseRequisition.objects.get(pr_id = pr_id)
     for item in items:
         
-        itemitem =Item(item_id = item['item_id'], item_name = item['item_name']  )
+        itemitem =Item(item_id = item['item_id'], item_name = item['item_name'],  item_description = item['description'] )
         itemitem.save()
         pr_item_info = PurchaseRequisitionItem(pr_id = purchase_requisition, 
                                          item_id = itemitem, 
