@@ -99,7 +99,7 @@ def quotationconfirmation(request):
 
     while i < items_length:
         total= Decimal(items_quantity[i]) * Decimal(items_unit_price[i])
-        grand_total += total #change: add up to grand total
+        grand_total += total #change: add up to grand total //change implemented in part 1
         item_table = {
             'item_name': items_name[i],
             'item_id': items_id[i],
