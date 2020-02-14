@@ -29,7 +29,12 @@ from django.http import HttpResponse
 
 @login_required
 def requestforquotationform(request):
+    requisitionPurchase = PurchaseRequisition.objects.all()
+    for r in requisitionPurchase:
+        if RequestForQuotation.objects.filter(purchase_requisition_id_id = r.pr_id).count() != 0:
+            requisitionPurchase = requisitionPurchase.exclude(pr_id=r.pr_id)
     context = {
+            'rfqrows': requisitionPurchase,
             'title':'Request For Quotation Form',
             'year':'2019/2020'
         }
@@ -47,12 +52,18 @@ def fillingrequestforquotation(request):
     staff_id = request.user.id
     staff_info = Person.objects.get(user_id = staff_id)
 
+    requisitionPurchase = PurchaseRequisition.objects.all()
+    for r in requisitionPurchase:
+        if RequestForQuotation.objects.filter(purchase_requisition_id_id = r.pr_id).count() != 0:
+            requisitionPurchase = requisitionPurchase.exclude(pr_id=r.pr_id)
+
     try: 
        
         purchase_requisition = PurchaseRequisition.objects.get(pr_id = pr_id)
         item_list = PurchaseRequisitionItem.objects.filter(pr_id = pr_id)
         context = {
                 'title': 'Request For Quotation Form',
+                'rfqrows': requisitionPurchase,
                 'request_for_quotation_id': 'RFQ' + str(rfq_id),
                 'purchase_requisition_id': pr_id, 
                 'staff_id' : staff_info.person_id,
@@ -74,6 +85,7 @@ def requestforquotationconfirmation(request):
     rfq_id = request.POST['request_for_quotation_id']
     purchase_requisition_id = request.POST['purchase_requisition_id']
     staff_id = request.user.id
+
     vendor_id = request.POST['vendor_id']
     description = request.POST['description']
     staff_info = Person.objects.get(user_id = staff_id)
@@ -83,15 +95,15 @@ def requestforquotationconfirmation(request):
     q= QueryDict(responses)
     
     items_id = q.getlist('item_id')
-    print(items_id)
+    #print(items_id)
     items_name = q.getlist('item_name')
-    print(items_name)
+    #print(items_name)
     items_quantity = q.getlist('quantity')
-    print(items_quantity)
+    #print(items_quantity)
     items_unit_price = q.getlist('unit_price')
-    print(items_unit_price)
+    #print(items_unit_price)
     items_total_price = q.getlist('total_price')
-    print(items_total_price)
+    #print(items_total_price)
 
 
     items = list()
