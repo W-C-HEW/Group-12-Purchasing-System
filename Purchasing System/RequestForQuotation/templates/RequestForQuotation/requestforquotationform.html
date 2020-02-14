@@ -15,6 +15,25 @@
 
     </form>
     <p>{{error}}</p>
+    
+    {% if rfqrows.count > 0 %}
+    <div class="table-wrapper-scroll-y">
+        <table class="table table-bordered table-striped mb-0">
+            <thead>
+                 <tr>
+                    <th scope="col">Available Purchase Requisition ID(s)</th>
+                 </tr>
+            </thead>
+            <tbody>
+            {% for r in rfqrows %}
+                <tr>
+                    <td>{{r.pr_id}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
 
     <form class="purchaseordersubmission" action="requestforquotationconfirmation" method="POST">
         {% csrf_token %}
