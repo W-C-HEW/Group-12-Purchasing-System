@@ -41,26 +41,40 @@ def fillingdeliveryorder(request):
     user_id = request.user.id
     staff = Person.objects.get(user_id = user_id)
 
+    deliveryorders = DeliveryOrder.objects.all()
+    numberdo = len(deliveryorders)
+
     try: 
-        po = PurchaseOrder.objects.get(purchase_order_id = pur_id)
-        item_list = PurchaseOrderItem.objects.filter(purchase_order_id = pur_id)
-        context = {
-                'title': 'Delivery Order Form',
-                'delivery_order_id': 'DO' + str(do_id),
-                'purchase_order_id': pur_id, 
-                'staff_id' : staff.person_id,
-                'vendor_id': po.vendor_id.vendor_id,
-                'rows':item_list
-            }
 
-        return render(request,'DeliveryOrder/deliveryorderform.html',context)
+        deliveryorder = DeliveryOrder.objects.get(purchase_order_id = pur_id)
+        print(deliveryorder)
 
-    except PurchaseOrder.DoesNotExist:
-
-        context = { 'error': 'The quotation id is invalid !',
+        context = { 'error': 'The delivery order is already Issued! Delivery Order Number: ' + deliveryorder.delivery_order_id,
                     'title': 'Delivery Order Form'
             }
         return render(request,'DeliveryOrder/deliveryorderform.html',context)
+
+    except DeliveryOrder.DoesNotExist:
+        try: 
+            po = PurchaseOrder.objects.get(purchase_order_id = pur_id)
+            item_list = PurchaseOrderItem.objects.filter(purchase_order_id = pur_id)
+            context = {
+                    'title': 'Delivery Order Form',
+                    'delivery_order_id': 'DO' + str(do_id),
+                    'purchase_order_id': pur_id, 
+                    'staff_id' : staff.person_id,
+                    'vendor_id': po.vendor_id.vendor_id,
+                    'rows':item_list
+                }
+
+            return render(request,'DeliveryOrder/deliveryorderform.html',context)
+
+        except PurchaseOrder.DoesNotExist:
+
+            context = { 'error': 'The quotation id is invalid !',
+                        'title': 'Delivery Order Form'
+                }
+            return render(request,'DeliveryOrder/deliveryorderform.html',context)
 
 def deliveryorderconfirmation(request):
 
